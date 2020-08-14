@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <div id="container">
+        <div id="money">
+            <div class="bill b1"></div>
+            <div class="bill b2"></div>
+            <div class="bill b3"></div>
+            <div class="bill b4"></div>
+            <div class="bill b5"></div>
+            <div class="bill b6"></div>
+            <div class="bill b7"></div>
+            <div class="bill b8"></div>
+            <div class="bill b8"></div>
+            <div class="bill b10"></div>
+        </div>
+    </div>
+    <div class="main">
+        <div id="heading">
+            <h2> Welcome To BlackJack! </h2>
+            <h3>&copy; Akshat Gupta</h3>
+        </div>
+        <h3 id="winning-price">
+            <b> Total Winnings : $0 </b>
+        </h3>
+        <div class="controls">
+            <button id="new-game">Play a BlackJack Game</button>
+            <button id="deal">Deal for $50</button>
+            <select id="amount">
+                <option value="50">$50</option>
+                <option value="100">$100</option>
+                <option value="1000">$1K</option>
+                <option value="50000">$50K</option>
+                <option value="1000000">$1M</option>
+            </select>
+            <button id="hit">Hit!</button>
+            <button id="stand">Stay</button>
+        </div>
+    </div>
+    <p id="playarea"></p>
+    <audio id="music" autoplay="autoplay">
+        <source src="audio/casino.mp3" type="audio/mp3">
+    </audio>
+    <script src="script.js"></script>
+</body>
+</html>

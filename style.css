@@ -1,0 +1,305 @@
+﻿body {
+    background:linear-gradient(rgba(26, 26, 26, 0.7), rgba(26, 26, 26, 0.7)),url("img/poker.jpg");
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-y:hidden;
+    font-family: Helvetica;
+}
+#heading {
+    margin-left:5%;
+    color: darkgoldenrod;
+}
+#heading h3{
+    margin-left:0%;
+}
+#heading h4{
+    margin-top:-7%;
+    margin-right:5%;
+    float:right;
+}
+h3{
+    margin-left:30px;
+    color : darkgoldenrod;
+}
+button {
+    margin-top : -15px;
+    margin-left : 40px;
+    background-color: #555555;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+.controls{
+    margin-left:38%;
+}
+#playarea {
+    background-color: darkred;
+    height: 70%;
+    margin-left: 25%;
+    margin: 20px auto;
+    width: 50%;
+    border: solid 2px darkgoldenrod;
+    padding: 10px;
+    text-align: center;
+    color: white;
+}
+
+.card {
+    padding: 10px;
+    border: solid 1px #808080;
+    background-color: white;
+    display: inline-block;
+    border-radius: 10px;
+    font-size: 14pt;
+    text-align: center;
+    color: black;
+    margin: 3px;
+}
+.btn {
+    background: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    margin: 10px;
+    display: inline-block;
+}
+
+.card .valueTop {
+    font-size: 15pt;
+    font-family: sans-serif;
+}
+.card .valueBottom {
+    font-size: 15pt;
+    font-family: sans-serif;
+}
+.card .suit {
+    height: 100px;
+    width: 90px;
+}
+
+.card .diamonds {
+    background-position-y: 100px;
+}
+
+.card .hearts {
+    background-position-x: 90px;
+}
+
+.card .clubs {
+    background-position-x: 90px;
+    background-position-y: 100px;
+}
+.theme-construction {
+    --radius: 0;
+    --baseFg: white;
+    --baseBg: black;
+    --accentFg: black;
+    --accentBg: orange;
+}
+select::-ms-expand {
+    display: none;
+}
+
+select {
+    border :2px solid darkgoldenrod;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 0.5em 2em 0.5em 0.5em;
+    border: 1px solid #eee;
+    font: inherit;
+    line-height: inherit;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position: right 15px top 1em, right 10px top 1em;
+    background-size: 5px 5px, 5px 5px;
+}
+
+
+
+#container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 0;
+}
+
+@-moz-keyframes drop {
+    from {
+        top: -20px;
+    }
+
+    to {
+        top: 700px;
+    }
+}
+
+@-webkit-keyframes drop {
+    from {
+        top: -20px;
+    }
+
+    to {
+        top: 700px;
+    }
+}
+
+@-moz-keyframes bill {
+    0% {
+        -moz-transform: rotate(-180deg) translate(0px, 0px) rotateX(-360deg) rotateY(-180deg);
+        border-bottom-left-radius: 0px;
+        border-top-left-radius: 0px;
+    }
+
+    10% {
+        border-bottom-right-radius: 0px;
+        border-top-right-radius: 3px;
+    }
+
+    15% {
+        border-bottom-right-radius: 35px;
+        border-bottom-left-radius: 0px;
+        border-top-right-radius: 60px;
+    }
+
+    50% {
+        -moz-transform: rotate(180deg) translate(10px, 95px) rotateX(180deg) rotateY(180deg);
+        border-bottom-left-radius: 50px;
+    }
+
+    60% {
+        border-top-left-radius: 60px;
+        border-top-right-radius: 3px;
+    }
+
+    70% {
+        border-top-left-radius: 10px;
+    }
+}
+
+@-webkit-keyframes bill {
+    0% {
+        -webkit-transform: rotate(-180deg) translate(0px, 0px) rotateX(-360deg) rotateY(-180deg);
+        border-bottom-left-radius: 0px;
+        border-top-left-radius: 0px;
+    }
+
+    10% {
+        border-bottom-right-radius: 0px;
+        border-top-right-radius: 3px;
+    }
+
+    15% {
+        border-bottom-right-radius: 35px;
+        border-bottom-left-radius: 0px;
+        border-top-right-radius: 60px;
+    }
+
+    50% {
+        -webkit-transform: rotate(180deg) translate(10px, 95px) rotateX(180deg) rotateY(180deg);
+        border-bottom-left-radius: 50px;
+    }
+
+    60% {
+        border-top-left-radius: 60px;
+        border-top-right-radius: 3px;
+    }
+
+    70% {
+        border-top-left-radius: 10px;
+    }
+}
+
+@-moz-keyframes flip {
+    0% {
+        -moz-transform: rotateX(-180deg);
+    }
+
+    100% {
+        -moz-transform: rotateX(180deg);
+    }
+}
+
+#money div {
+    position: absolute;
+    top: -40px;
+    -moz-animation-name: drop, bill;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-direction: normal;
+    -moz-animation-timing-function: ease-in;
+    -webkit-animation-name: drop, bill;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: normal;
+    -webkit-animation-timing-function: ease-in;
+}
+
+.bill {
+    background-image: url(img/dollar.jpg);
+    background-size: contain;
+    height: 21px;
+    width: 51px;
+    position: absolute;
+}
+
+    .bill.b1 {
+        left: 40px;
+        -moz-animation-duration: 12s;
+        -webkit-animation-duration: 12s;
+    }
+
+    .bill.b2 {
+        font-size: 1.8em;
+        left: 120px;
+        -moz-animation-duration: 7s;
+        -webkit-animation-duration: 7s;
+    }
+
+    .bill.b3 {
+        left: 200px;
+        -moz-animation-duration: 11s;
+    }
+
+    .bill.b4 {
+        left: 280px;
+        -moz-animation-duration: 13s;
+    }
+
+    .bill.b5 {
+        left: 380px;
+        -moz-animation-duration: 8s;
+        -webkit-animation-duration: 8s;
+    }
+
+    .bill.b6 {
+        left: 980px;
+        -moz-animation-duration: 5s;
+        -webkit-animation-duration: 5s;
+    }
+
+    .bill.b7 {
+        left: 1000px;
+        -moz-animation-duration: 11s;
+        -webkit-animation-duration: 11s;
+    }
+
+    .bill.b8 {
+        left: 1020px;
+        -moz-animation-duration: 7s;
+        -webkit-animation-duration: 7s;
+    }
+
+    .bill.b9 {
+        left: 1040px;
+        -moz-animation-duration: 15s;
+        -webkit-animation-duration: 15s;
+    }
+
+    .bill.b10 {
+        left: 1080px;
+        -moz-animation-duration: 22s;
+        -webkit-animation-duration: 22s;
+    }
