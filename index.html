@@ -1,53 +1,427 @@
-﻿<!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes" />
-    <link rel="stylesheet" href="style.css">
-    <meta charset="utf-8" />
-    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mandi to Leh: Interactive Trip Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Adjusted for better fit */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Base height */
+       r     max-height: 350px; /* Max height */
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 320px; /* Adjusted for medium screens */
+            }
+        }
+        /* Custom scrollbar for content area if needed */
+        .content-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .content-scroll::-webkit-scrollbar-track {
+            background: #fde68a; /* amber-200 */
+        }
+        .content-scroll::-webkit-scrollbar-thumb {
+            background: #fbbf24; /* amber-500 */
+            border-radius: 4px;
+        }
+        .nav-item {
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+        .nav-item:hover, .nav-item.active {
+            background-color: #fcd34d; /* amber-400 */
+            color: #78350f; /* amber-800 */
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body>
-    <div id="container">
-        <div id="money">
-            <div class="bill b1"></div>
-            <div class="bill b2"></div>
-            <div class="bill b3"></div>
-            <div class="bill b4"></div>
-            <div class="bill b5"></div>
-            <div class="bill b6"></div>
-            <div class="bill b7"></div>
-            <div class="bill b8"></div>
-            <div class="bill b8"></div>
-            <div class="bill b10"></div>
-        </div>
+<body class="bg-orange-50 text-stone-800">
+
+    <div class="min-h-screen flex flex-col md:flex-row">
+        <aside class="w-full md:w-64 bg-amber-100 p-4 md:p-6 space-y-4 md:min-h-screen shadow-lg">
+            <h1 class="text-2xl font-bold text-amber-700 mb-6 border-b-2 border-amber-300 pb-2">Trip Menu</h1>
+            <nav id="tripNavigation" class="space-y-2">
+                <a data-target="day1" class="nav-item block">Day 1: Mandi to Jispa</a>
+                <a data-target="day2" class="nav-item block">Day 2: Jispa to Pang</a>
+                <a data-target="day3" class="nav-item block">Day 3: Pang to Leh & Local</a>
+                <a data-target="day4" class="nav-item block">Day 4: Leh to Hunder</a>
+                <a data-target="day5" class="nav-item block">Day 5: Hunder to Pangong</a>
+                <a data-target="day6" class="nav-item block">Day 6: Pangong to Pang</a>
+                <a data-target="day7" class="nav-item block">Day 7: Pang to Mandi</a>
+                <a data-target="overview" class="nav-item block">Trip Overview & Stats</a>
+                <a data-target="considerations" class="nav-item block">Important Considerations</a>
+            </nav>
+        </aside>
+
+        <main id="mainContent" class="flex-1 p-4 md:p-8 lg:p-10 overflow-y-auto content-scroll bg-white shadow-inner">
+            </main>
     </div>
-    <div class="main">
-        <div id="heading">
-            <h2> Welcome To BlackJack! </h2>
-            <h3>&copy; Akshat Gupta</h3>
-        </div>
-        <h3 id="winning-price">
-            <b> Total Winnings : $0 </b>
-        </h3>
-        <div class="controls">
-            <button id="new-game">Play a BlackJack Game</button>
-            <button id="deal">Deal for $50</button>
-            <select id="amount">
-                <option value="50">$50</option>
-                <option value="100">$100</option>
-                <option value="1000">$1K</option>
-                <option value="50000">$50K</option>
-                <option value="1000000">$1M</option>
-            </select>
-            <button id="hit">Hit!</button>
-            <button id="stand">Stay</button>
-        </div>
-    </div>
-    <p id="playarea"></p>
-    <audio id="music" autoplay="autoplay">
-        <source src="audio/casino.mp3" type="audio/mp3">
-    </audio>
-    <script src="script.js"></script>
+
+    <script>
+        const contentData = {
+            day1: {
+                title: "Day 1: Sunday - Mandi to Jispa",
+                subtitle: "Embark on your Himalayan adventure!",
+                intro: "Your epic journey begins in the picturesque town of Mandi, nestled in the heart of Himachal Pradesh. Today, you'll drive approximately 200 km towards Jispa, a tranquil village in the Lahaul Valley. The drive offers stunning views as you ascend, passing through winding roads and lush green landscapes.",
+                distance: "Approx. 200 kms",
+                routeHighlights: [
+                    "Beautiful Beas River alongside the initial route.",
+                    "Scenic spots like Pandoh Dam and Aut Tunnel.",
+                    "Passage towards Manali, then dramatic landscape change towards Rohtang Pass (now largely bypassed by Atal Tunnel).",
+                    "Road from Manali to Jispa is generally well-maintained, with some rough patches and water crossings at higher altitudes."
+                ],
+                attractions: [
+                    "Mandi Town Views",
+                    "Atal Tunnel (experience)",
+                    "Scenic Lahaul Valley views and Jispa village"
+                ],
+                accommodation: "Advance-booked accommodation in Jispa, ensuring a comfortable night's rest amidst the Himalayan grandeur.",
+                images: [
+                    "https://via.placeholder.com/600x400/FBBF24/422006?text=Mandi+Valley",
+                    "https://via.placeholder.com/600x400/FBBF24/422006?text=Atal+Tunnel+Entrance",
+                    "https://via.placeholder.com/600x400/FBBF24/422006?text=Jispa+Village"
+                ],
+                mapPlaceholder: "https://via.placeholder.com/600x200/92400E/FFFFFF?text=Map+View:+Mandi+to+Jispa"
+            },
+            day2: {
+                title: "Day 2: Monday - Jispa to Pang",
+                subtitle: "Conquering High Passes and Vast Plains",
+                intro: "Today is a day of significant altitude gain and dramatic landscape changes. You'll cover approximately 180 km from Jispa to Pang, crossing some of the most iconic high-altitude passes on the Manali-Leh Highway.",
+                distance: "Approx. 180 kms",
+                routeHighlights: [
+                    "Cross Baralacha La (approx. 4,890m / 16,040 ft), dividing Lahaul and Zanskar ranges.",
+                    "Witness breathtaking glacial landscapes and possibly frozen lakes like Suraj Tal (Sun Lake).",
+                    "Road over Baralacha La can be challenging, often snow-covered with rough patches.",
+                    "Descend into Sarchu, a vast plain with tented camps.",
+                    "Cross twin passes: Nakee La (approx. 4,739m / 15,547 ft) & Lachulung La (approx. 5,059m / 16,598 ft).",
+                    "Arrive in Pang, a high-altitude military transit camp with basic tented accommodations."
+                ],
+                attractions: [
+                    "Baralacha La Pass",
+                    "Suraj Tal Lake",
+                    "Sarchu Plains",
+                    "Nakee La Pass",
+                    "Lachulung La Pass",
+                    "Gata Loops (series of hairpin bends often encountered before Nakee La)"
+                ],
+                accommodation: "Basic tented accommodation in Pang, crucial for breaking the journey and acclimatization.",
+                images: [
+                    "https://via.placeholder.com/600x400/F59E0B/422006?text=Baralacha+La+Pass",
+                    "https://via.placeholder.com/600x400/F59E0B/422006?text=Suraj+Tal+Lake",
+                    "https://via.placeholder.com/600x400/F59E0B/422006?text=Gata+Loops"
+                ],
+                mapPlaceholder: "https://via.placeholder.com/600x200/92400E/FFFFFF?text=Map+View:+Jispa+to+Pang"
+            },
+            day3: {
+                title: "Day 3: Tuesday - Pang to Leh & Leh Local Sightseeing",
+                subtitle: "Arrival in the Land of High Passes and Monasteries!",
+                intro: "The final leg of your journey to Leh is relatively shorter. This morning, you'll experience the vastness of the Morey Plains and conquer another significant pass before reaching the vibrant capital of Ladakh. Remember to rest and acclimatize upon arrival before sightseeing.",
+                distance: "Approx. 170 kms (Pang to Leh)",
+                routeHighlights: [
+                    "Drive through the incredibly flat and vast Morey Plains.",
+                    "Conquer Tanglang La (approx. 5,328m / 17,480 ft), one of the world's highest motorable passes.",
+                    "Road generally improves after Tanglang La as you descend towards Leh."
+                ],
+                attractions: [
+                    "Morey Plains",
+                    "Tanglang La Pass",
+                    "Magnetic Hill",
+                    "Hall of Fame Museum",
+                    "Gurudwara Pathar Sahib",
+                    "Leh Palace",
+                    "Shanti Stupa",
+                    "Leh Market"
+                ],
+                accommodation: "Hotel/Guesthouse in Leh (self-arranged or part of package).",
+                images: [
+                    "https://via.placeholder.com/600x400/D97706/422006?text=Morey+Plains",
+                    "https://via.placeholder.com/600x400/D97706/422006?text=Tanglang+La+Pass",
+                    "https://via.placeholder.com/600x400/D97706/422006?text=Magnetic+Hill",
+                    "https://via.placeholder.com/600x400/D97706/422006?text=Shanti+Stupa"
+                ],
+                mapPlaceholder: "https://via.placeholder.com/600x200/92400E/FFFFFF?text=Map+View:+Pang+to+Leh"
+            },
+            day4: {
+                title: "Day 4: Wednesday - Leh to Hunder (Nubra Valley) via Khardung La Top",
+                subtitle: "Journey to the Cold Desert through the 'Highest Motorable Road'",
+                intro: "Today, you embark on a thrilling drive to Nubra Valley, crossing the legendary Khardung La. The total distance is approximately 160-200 km, depending on exact routes within Nubra.",
+                distance: "Approx. 160-200 kms",
+                routeHighlights: [
+                    "Cross Khardung La (approx. 5,359m / 17,582 ft), historically considered the world's highest motorable pass.",
+                    "Road to Khardung La can be challenging with slush, ice, and rough patches.",
+                    "Descend into Nubra Valley, a high-altitude cold desert with sand dunes and the Shyok River."
+                ],
+                attractions: [
+                    "Khardung La Pass",
+                    "Diskit Monastery (with Maitreya Buddha statue)",
+                    "Hunder Sand Dunes",
+                    "Double-humped Bactrian Camel Safari"
+                ],
+                accommodation: "Overnight stay in Hunder (camps or guesthouses).",
+                images: [
+                    "https://via.placeholder.com/600x400/B45309/FFFFFF?text=Khardung+La+Top",
+                    "https://via.placeholder.com/600x400/B45309/FFFFFF?text=Diskit+Monastery",
+                    "https://via.placeholder.com/600x400/B45309/FFFFFF?text=Hunder+Camels"
+                ],
+                mapPlaceholder: "https://via.placeholder.com/600x200/92400E/FFFFFF?text=Map+View:+Leh+to+Hunder"
+            },
+            day5: {
+                title: "Day 5: Thursday - Hunder to Pangong Tso",
+                subtitle: "The Mesmerizing Blue of Pangong Lake",
+                intro: "Today, you'll journey from Hunder directly to the iconic Pangong Tso, often via Shyok village. This route is approximately 235 km and offers a different perspective of Ladakh's diverse terrain.",
+                distance: "Approx. 235 kms",
+                routeHighlights: [
+                    "Travel via the Shyok route, saving a return trip to Leh.",
+                    "Road conditions can be tricky in sections, with water crossings and landslide-prone areas (inquire locally).",
+                    "Arrive at the breathtaking Pangong Lake (approx. 4,225m / 13,862 ft), famous for its ever-changing shades of blue."
+                ],
+                attractions: [
+                    "Scenic Shyok River views",
+                    "Pangong Tso Lake",
+                    "Changthang Wildlife Sanctuary views (en route)"
+                ],
+                accommodation: "Overnight stay at a camp or guesthouse near Pangong Tso (e.g., Spangmik). Be prepared for cold nights.",
+                images: [
+                    "https://via.placeholder.com/600x400/92400E/FFFFFF?text=Shyok+Valley",
+                    "https://via.placeholder.com/600x400/92400E/FFFFFF?text=Pangong+Lake+View"
+                ],
+                mapPlaceholder: "https://via.placeholder.com/600x200/92400E/FFFFFF?text=Map+View:+Hunder+to+Pangong"
+            },
+            day6: {
+                title: "Day 6: Friday - Pangong Tso to Pang",
+                subtitle: "Retracing Your Steps Through High-Altitude Landscapes",
+                intro: "Today marks the beginning of your return journey. You'll drive approximately 225 km from Pangong Tso back to Pang, retracing some of your earlier path and crossing Chang La.",
+                distance: "Approx. 225 kms",
+                routeHighlights: [
+                    "Return via Chang La Pass (approx. 5,360m / 17,590 ft).",
+                    "Road from Pangong to Chang La can be challenging with rough patches and stream crossings.",
+                    "Descend towards the Morey Plains and reach Pang for overnight stay."
+                ],
+                attractions: [
+                    "Chang La Pass",
+                    "Tsoltak Lake (near Chang La)",
+                    "Stunning views on descent"
+                ],
+                accommodation: "Overnight stay in basic tented accommodation at Pang.",
+                images: [
+                    "https://via.placeholder.com/600x400/78350F/FFFFFF?text=Chang+La+Pass",
+                    "https://via.placeholder.com/600x400/78350F/FFFFFF?text=Road+to+Pang"
+                ],
+                mapPlaceholder: "https://via.placeholder.com/600x200/92400E/FFFFFF?text=Map+View:+Pangong+to+Pang"
+            },
+            day7: {
+                title: "Day 7: Saturday - Pang to Mandi (Return Journey)",
+                subtitle: "The Long Drive Back to Civilization",
+                intro: "Today is the longest day of driving as you complete your return journey from Pang to Mandi. This stretch covers a significant distance (approx. 380 km), and an early start is recommended.",
+                distance: "Approx. 380 kms",
+                routeHighlights: [
+                    "Retrace path from Pang, crossing Tanglang La, Lachulung La, Nakee La, Baralacha La.",
+                    "Pass through Sarchu, Jispa, Keylong, and Manali (via Atal Tunnel).",
+                    "Be mindful of road conditions on high passes.",
+                    "The stretch from Zingzingbar to Pang (in reverse) can be challenging."
+                ],
+                attractions: [
+                    "Revisiting the high passes in reverse",
+                    "Transition from barren landscapes to greener valleys of Himachal"
+                ],
+                accommodation: "Journey ends in Mandi. (No overnight stay planned in itinerary for this day).",
+                images: [
+                    "https://via.placeholder.com/600x400/451A03/FFFFFF?text=High+Pass+Return",
+                    "https://via.placeholder.com/600x400/451A03/FFFFFF?text=Himachal+Greenery"
+                ],
+                mapPlaceholder: "https://via.placeholder.com/600x200/92400E/FFFFFF?text=Map+View:+Pang+to+Mandi"
+            },
+            overview: {
+                title: "Trip Overview & Stats",
+                intro: "This section provides a visual overview of your Mandi to Leh road trip, including daily driving distances and maximum altitudes encountered. Use these charts to get a better sense of the journey's demands.",
+                charts: [
+                    { id: "distanceChart", title: "Daily Driving Distance (kms)" },
+                    { id: "altitudeChart", title: "Max Altitude Reached/Crossed Daily (meters)" }
+                ]
+            },
+            considerations: {
+                title: "Important Considerations for Your Trip",
+                intro: "Planning a road trip to Ladakh requires careful preparation. Here are some crucial points to keep in mind for a safe and enjoyable journey:",
+                points: [
+                    "<strong>Acclimatization:</strong> This is paramount. Follow the itinerary's gradual ascent and allow for rest in Leh. Drink plenty of water (3-4 liters daily), avoid alcohol and smoking, and listen to your body. Ascend slowly. Carry basic medicines for AMS (Acute Mountain Sickness) like Diamox (consult your doctor first).",
+                    "<strong>Permits:</strong> Indian nationals typically need an Inner Line Permit (ILP) for Nubra Valley, Pangong Tso, Tso Moriri, etc. Foreign nationals require a Protected Area Permit (PAP). These can be obtained online or through travel agents in Leh. Carry multiple photocopies.",
+                    "<strong>Road Conditions:</strong> The Manali-Leh Highway is challenging. Roads can be rough, unpaved, and involve water crossings (nalas). Landslides are possible, especially during monsoon (July-August). Always check the latest road status. A 4x4 vehicle or a high-ground clearance vehicle (SUV) is highly recommended. Drive slowly and carefully.",
+                    "<strong>Vehicle Preparation:</strong> Ensure your vehicle is in excellent condition. Check tires (including spare), brakes, engine oil, coolant. Carry a basic toolkit, puncture repair kit, and tow rope.",
+                    "<strong>Fuel:</strong> Fuel stations are scarce. Refuel whenever possible (Mandi, Manali, Keylong, Leh). Carry extra fuel in jerry cans if your vehicle has low mileage or for remote routes like Nubra-Pangong direct.",
+                    "<strong>Best Time to Travel:</strong> June to September is generally the best time, when passes are open and weather is relatively stable. July and August might see some monsoon effects on the Manali side.",
+                    "<strong>Accommodation:</strong> Options range from hotels in towns like Manali and Leh to basic guesthouses and tented camps in places like Jispa, Sarchu, Pang, and near Pangong Tso. Book in advance during peak season.",
+                    "<strong>Communication:</strong> Mobile connectivity is limited. Postpaid BSNL, Airtel, and Jio connections work in Leh and some other areas. Data connectivity is often slow. Inform your family about your itinerary.",
+                    "<strong>Essentials to Carry:</strong> Warm clothing (layers are key: thermals, fleece, windproof jacket, woolen cap, gloves), rain gear, sturdy waterproof trekking shoes, first-aid kit (band-aids, antiseptic, pain relievers, motion sickness tabs, medication for AMS), sunscreen (SPF 30+), sunglasses (UV protection), lip balm, power bank, torch/headlamp, snacks (energy bars, dry fruits, chocolates), water bottles (reusable), cash (ATMs are limited outside Leh and Manali).",
+                    "<strong>Respect Local Culture:</strong> Ladakh has a rich Buddhist culture. Dress modestly when visiting monasteries, ask for permission before taking photographs of people or inside monasteries. Be mindful of local customs.",
+                    "<strong>Environment:</strong> Ladakh is an ecologically sensitive region. Avoid littering, do not use plastic bags, and minimize your environmental impact. Carry your trash back to dispose of it responsibly."
+                ]
+            }
+        };
+
+        const mainContent = document.getElementById('mainContent');
+        const navigationLinks = document.querySelectorAll('#tripNavigation a');
+
+        function renderContent(targetId) {
+            mainContent.innerHTML = ''; // Clear previous content
+            const data = contentData[targetId];
+            if (!data) {
+                mainContent.innerHTML = `<h2 class="text-2xl font-bold text-amber-700 mb-4">Content not found</h2>`;
+                return;
+            }
+
+            let html = `<div class="fade-in">`;
+            html += `<h2 class="text-3xl md:text-4xl font-bold text-amber-700 mb-3">${data.title}</h2>`;
+            if (data.subtitle) {
+                html += `<p class="text-lg text-stone-600 mb-6">${data.subtitle}</p>`;
+            }
+            if (data.intro) {
+                html += `<p class="mb-6 text-stone-700 leading-relaxed">${data.intro}</p>`;
+            }
+
+            if (data.distance) {
+                html += `<p class="mb-4"><strong>Distance:</strong> ${data.distance}</p>`;
+            }
+
+            if (data.routeHighlights) {
+                html += `<h3 class="text-xl font-semibold text-amber-600 mt-6 mb-2">Route Highlights:</h3><ul class="list-disc list-inside space-y-1 mb-4 text-stone-700">`;
+                data.routeHighlights.forEach(item => { html += `<li>${item}</li>`; });
+                html += `</ul>`;
+            }
+
+            if (data.attractions) {
+                html += `<h3 class="text-xl font-semibold text-amber-600 mt-6 mb-2">Key Attractions:</h3><ul class="list-disc list-inside space-y-1 mb-4 text-stone-700">`;
+                data.attractions.forEach(item => { html += `<li>${item}</li>`; });
+                html += `</ul>`;
+            }
+            
+            if (data.accommodation) {
+                html += `<h3 class="text-xl font-semibold text-amber-600 mt-6 mb-2">Accommodation Note:</h3><p class="mb-4 text-stone-700">${data.accommodation}</p>`;
+            }
+
+            if (data.mapPlaceholder) {
+                html += `<h3 class="text-xl font-semibold text-amber-600 mt-6 mb-2">Route Map (Illustrative):</h3>`;
+                html += `<img src="${data.mapPlaceholder}" alt="Map placeholder for ${data.title}" class="w-full max-w-2xl mx-auto rounded-lg shadow-md mb-6 border border-amber-300">`;
+            }
+            
+            if (data.images && data.images.length > 0) {
+                html += `<h3 class="text-xl font-semibold text-amber-600 mt-6 mb-2">Visual Highlights:</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">`;
+                data.images.forEach(src => {
+                    html += `<div><img src="${src}" alt="Highlight image for ${data.title}" class="w-full h-auto object-cover rounded-lg shadow-md border border-amber-300"></div>`;
+                });
+                html += `</div>`;
+            }
+
+            if (data.points) {
+                html += `<ul class="space-y-3 text-stone-700 leading-relaxed">`;
+                data.points.forEach(point => { html += `<li class="pl-4 border-l-4 border-amber-400">${point}</li>`; });
+                html += `</ul>`;
+            }
+
+            if (data.charts) {
+                data.charts.forEach(chartInfo => {
+                    html += `<h3 class="text-2xl font-semibold text-amber-600 mt-8 mb-3 text-center">${chartInfo.title}</h3>`;
+                    html += `<div class="chart-container mb-8 bg-white p-4 rounded-lg shadow-lg border border-amber-200"><canvas id="${chartInfo.id}"></canvas></div>`;
+                });
+                // Delay chart rendering until after HTML is in DOM
+                setTimeout(() => renderCharts(targetId), 0);
+            }
+            html += `</div>`;
+            mainContent.innerHTML = html;
+        }
+
+        function renderCharts(targetId) {
+            if (targetId === 'overview') {
+                // Data for charts
+                const dailyDistances = [200, 180, 170, 180, 235, 225, 380]; // Day 4 Leh-Hunder ~180km for consistency
+                const maxAltitudes = [3200, 5059, 5328, 5359, 4225, 5360, 5059]; // Approx. meters
+                const dayLabels = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"];
+
+                // Distance Chart
+                const distCtx = document.getElementById('distanceChart');
+                if (distCtx) {
+                    new Chart(distCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: dayLabels,
+                            datasets: [{
+                                label: 'Distance (km)',
+                                data: dailyDistances,
+                                backgroundColor: 'rgba(251, 191, 36, 0.6)', // amber-400 with opacity
+                                borderColor: 'rgba(217, 119, 6, 1)', // amber-600
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: { y: { beginAtZero: true, title: { display: true, text: 'Kilometers' } } },
+                            plugins: { legend: { display: false } }
+                        }
+                    });
+                }
+
+                // Altitude Chart
+                const altCtx = document.getElementById('altitudeChart');
+                if (altCtx) {
+                    new Chart(altCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: dayLabels,
+                            datasets: [{
+                                label: 'Max Altitude (m)',
+                                data: maxAltitudes,
+                                backgroundColor: 'rgba(56, 189, 248, 0.6)', // sky-400 with opacity
+                                borderColor: 'rgba(14, 116, 144, 1)', // sky-700
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: { y: { beginAtZero: true, title: { display: true, text: 'Meters' } } },
+                            plugins: { legend: { display: false } }
+                        }
+                    });
+                }
+            }
+        }
+
+        navigationLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const targetId = link.getAttribute('data-target');
+                
+                navigationLinks.forEach(navLink => navLink.classList.remove('active'));
+                link.classList.add('active');
+                
+                renderContent(targetId);
+            });
+        });
+
+        // Initial load - show Day 1
+        navigationLinks[0].classList.add('active');
+        renderContent('day1');
+
+    </script>
+
 </body>
 </html>
